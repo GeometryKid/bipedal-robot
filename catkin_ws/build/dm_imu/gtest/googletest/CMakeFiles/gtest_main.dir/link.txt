@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O2 -g -DNDEBUG  -shared -Wl,-soname,libgtest_main.so -o ../lib/libgtest_main.so CMakeFiles/gtest_main.dir/src/gtest_main.cc.o  -Wl,-rpath,/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/build/dm_imu/gtest/lib ../lib/libgtest.so -lpthread 

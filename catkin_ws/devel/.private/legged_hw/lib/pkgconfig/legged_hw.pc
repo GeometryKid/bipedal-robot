@@ -1,0 +1,8 @@
+prefix=/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_hw
+
+Name: legged_hw
+Description: Description of legged_hw
+Version: 0.0.0
+Cflags: -I/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/src/legged_hw/include
+Libs: -L${prefix}/lib -llegged_hw
+Requires: roscpp legged_common controller_manager urdf dmbot_serial

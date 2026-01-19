@@ -1,0 +1,6 @@
+[35m[1mScanning dependencies of target dm_imu_node[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/dm_imu_node.dir/src/bsp_crc.cpp.o[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/dm_imu_node.dir/src/imu_driver.cpp.o[0m
+[ 75%] [32mBuilding CXX object CMakeFiles/dm_imu_node.dir/src/test_imu.cpp.o[0m
+[100%] [32m[1mLinking CXX executable /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/dm_imu/lib/dm_imu/dm_imu_node[0m
+[100%] Built target dm_imu_node

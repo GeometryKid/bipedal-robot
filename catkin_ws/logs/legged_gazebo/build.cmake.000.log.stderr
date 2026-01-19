@@ -1,0 +1,29 @@
+[33mWARNING: package 'gazebo_dev' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching[0m
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+[33mWARNING: package 'gazebo_ros_control' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching[0m
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+[33m[1mCMake Warning[0m at /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/src/legged_gazebo/CMakeLists.txt:38 (add_library):
+  Cannot generate a safe runtime search path for target dm_bipedal_hw_sim
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    runtime library [libboost_program_options.so.1.71.0] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /usr/local/lib
+    runtime library [libboost_chrono.so.1.71.0] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /usr/local/lib
+    runtime library [libboost_filesystem.so.1.71.0] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /usr/local/lib
+    runtime library [libboost_regex.so.1.71.0] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /usr/local/lib
+    runtime library [libboost_date_time.so.1.71.0] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /usr/local/lib
+    runtime library [libboost_system.so.1.71.0] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /usr/local/lib
+    runtime library [libboost_thread.so.1.71.0] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /usr/local/lib
+
+  Some of these libraries may not be found correctly.
+
+

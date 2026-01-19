@@ -1,0 +1,8 @@
+prefix=/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/dmbot_serial
+
+Name: dmbot_serial
+Description: Description of dmbot_serial
+Version: 0.0.0
+Cflags: -I/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/dmbot_serial/include -I/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/src/dmbot_serial/include
+Libs: -L${prefix}/lib -ldmbot_serial
+Requires: roscpp rospy std_msgs

@@ -1,0 +1,14 @@
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target _legged_wbc_generate_messages_check_deps_nvector3f
+[  0%] Built target _legged_wbc_generate_messages_check_deps_vector3f
+[ 29%] Built target legged_wbc
+[ 52%] Built target legged_wbc_generate_messages_lisp
+[ 58%] Built target legged_wbc_generate_messages_eus
+[ 76%] Built target legged_wbc_generate_messages_py
+[ 88%] Built target legged_wbc_generate_messages_nodejs
+[100%] Built target legged_wbc_generate_messages_cpp
+[100%] Built target legged_wbc_generate_messages

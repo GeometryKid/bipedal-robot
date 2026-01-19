@@ -1,0 +1,8 @@
+prefix=/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/install
+
+Name: legged_estimation
+Description: Description of legged_estimation
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -llegged_estimation
+Requires: roscpp legged_common realtime_tools tf2_ros legged_interface

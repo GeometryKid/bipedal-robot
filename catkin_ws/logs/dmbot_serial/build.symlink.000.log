@@ -1,0 +1,12 @@
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/include/dmbot_serial/my_cfgConfig.h
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/libdmbot_serial.so
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/dmbot_serial/test_motor
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/pkgconfig/dmbot_serial.pc
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/python3/dist-packages/dmbot_serial/__init__.py
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/python3/dist-packages/dmbot_serial/cfg/my_cfgConfig.py
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/python3/dist-packages/dmbot_serial/cfg/__init__.py
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/dmbot_serial/cmake/dmbot_serialConfig-version.cmake
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/dmbot_serial/cmake/dmbot_serialConfig.cmake
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/dmbot_serial/docs/my_cfgConfig-usage.dox
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/dmbot_serial/docs/my_cfgConfig.dox
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/dmbot_serial/docs/my_cfgConfig.wikidoc

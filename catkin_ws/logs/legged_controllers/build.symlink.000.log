@@ -1,0 +1,12 @@
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/include/legged_controllers/TutorialsConfig.h
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/liblegged_controllers.so
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/legged_controllers/legged_target_trajectories_publisher
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/pkgconfig/legged_controllers.pc
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/python3/dist-packages/legged_controllers/__init__.py
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/python3/dist-packages/legged_controllers/cfg/TutorialsConfig.py
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/python3/dist-packages/legged_controllers/cfg/__init__.py
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/legged_controllers/cmake/legged_controllersConfig-version.cmake
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/legged_controllers/cmake/legged_controllersConfig.cmake
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/legged_controllers/docs/TutorialsConfig-usage.dox
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/legged_controllers/docs/TutorialsConfig.dox
+Symlinking /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/legged_controllers/docs/TutorialsConfig.wikidoc

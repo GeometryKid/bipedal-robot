@@ -1,0 +1,6 @@
+[35m[1mScanning dependencies of target legged_estimation[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/legged_estimation.dir/src/FromTopicEstimate.cpp.o[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/legged_estimation.dir/src/StateEstimateBase.cpp.o[0m
+[ 75%] [32mBuilding CXX object CMakeFiles/legged_estimation.dir/src/LinearKalmanFilter.cpp.o[0m
+[100%] [32m[1mLinking CXX shared library /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_estimation/lib/liblegged_estimation.so[0m
+[100%] Built target legged_estimation

@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O2 -g -DNDEBUG  -shared -Wl,-soname,libdmbot_serial.so -o /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/dmbot_serial/lib/libdmbot_serial.so CMakeFiles/dmbot_serial.dir/src/robot_connect.cpp.o 

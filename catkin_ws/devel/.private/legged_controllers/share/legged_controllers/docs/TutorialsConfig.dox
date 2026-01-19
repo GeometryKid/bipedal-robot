@@ -1,0 +1,23 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~kp_position" : \b [double] kp_position min: 0.0, default: 0.0, max: 300.0
+- \b "~kd_position" : \b [double] kd_position min: 0.0, default: 0.0, max: 5.0
+- \b "~kp_hip_pitch_stance" : \b [double] kp_hip_pitch_stance min: 0.0, default: 20.0, max: 100.0
+- \b "~kp_hip_pitch_swing" : \b [double] kp_hip_pitch_swing min: 0.0, default: 20.0, max: 100.0
+- \b "~kd_hip_pitch_stance" : \b [double] kd_hip_pitch_stance min: 0.0, default: 3.0, max: 5.0
+- \b "~kd_hip_pitch_swing" : \b [double] kd_hip_pitch_swing min: 0.0, default: 3.0, max: 5.0
+- \b "~kp_hip_roll_stance" : \b [double] kp_hip_roll_stance min: 0.0, default: 20.0, max: 100.0
+- \b "~kp_hip_roll_swing" : \b [double] kp_hip_roll_swing min: 0.0, default: 20.0, max: 100.0
+- \b "~kd_hip_roll" : \b [double] kd_hip_roll min: 0.0, default: 5.0, max: 5.0
+- \b "~kp_hip_yaw_stance" : \b [double] kp_hip_yaw_stance min: 0.0, default: 20.0, max: 100.0
+- \b "~kp_hip_yaw_swing" : \b [double] kp_hip_yaw_swing min: 0.0, default: 20.0, max: 100.0
+- \b "~kd_hip_yaw" : \b [double] kd_hip_yaw min: 0.0, default: 3.0, max: 5.0
+- \b "~kp_knee_stance" : \b [double] kp_knee_stance min: 0.0, default: 20.0, max: 100.0
+- \b "~kp_knee_swing" : \b [double] kp_knee_swing min: 0.0, default: 20.0, max: 100.0
+- \b "~kd_knee" : \b [double] kd_knee min: 0.0, default: 3.0, max: 5.0
+- \b "~kp_feet_stance" : \b [double] kp_feet_stance min: 0.0, default: 20.0, max: 100.0
+- \b "~kp_feet_swing" : \b [double] kp_feet_swing min: 0.0, default: 20.0, max: 100.0
+- \b "~kd_feet" : \b [double] kd_feet min: 0.0, default: 1.0, max: 5.0
+
