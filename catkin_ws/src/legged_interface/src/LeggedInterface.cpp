@@ -47,14 +47,11 @@ at www.bridgedp.com.
 
 namespace legged
 {
-
-// Constructor中文注释：构造函数，加载任务文件、URDF文件和参考命令文件
-/******************************************************************************/
 LeggedInterface::LeggedInterface(const std::string& taskFile, const std::string& urdfFile,
                                  const std::string& referenceFile, bool useHardFrictionConeConstraint)
   : useHardFrictionConeConstraint_(useHardFrictionConeConstraint)
 {
-  // check that task file exists
+  // 确认task file的存在---check that task file exists
   boost::filesystem::path taskFilePath(taskFile);
   if (boost::filesystem::exists(taskFilePath))
   {
@@ -65,7 +62,7 @@ LeggedInterface::LeggedInterface(const std::string& taskFile, const std::string&
     throw std::invalid_argument("[LeggedInterface] Task file not found: " + taskFilePath.string());
   }
 
-  // check that urdf file exists
+  // 确认urdf file的存在---check that urdf file exists
   boost::filesystem::path urdfFilePath(urdfFile);
   if (boost::filesystem::exists(urdfFilePath))
   {
@@ -76,7 +73,7 @@ LeggedInterface::LeggedInterface(const std::string& taskFile, const std::string&
     throw std::invalid_argument("[LeggedInterface] URDF file not found: " + urdfFilePath.string());
   }
 
-  // check that targetCommand file exists
+  // 确认targetCommand file的存在---check that targetCommand file exists
   boost::filesystem::path referenceFilePath(referenceFile);
   if (boost::filesystem::exists(referenceFilePath))
   {
@@ -87,10 +84,11 @@ LeggedInterface::LeggedInterface(const std::string& taskFile, const std::string&
     throw std::invalid_argument("[LeggedInterface] targetCommand file not found: " + referenceFilePath.string());
   }
 
+  // 是否显示加载的参数---whether to show loaded parameters
   bool verbose = false;
   loadData::loadCppDataType(taskFile, "legged_robot_interface.verbose", verbose);
 
-  // load setting from loading file
+  // 加载设置---load setting from loading file
   modelSettings_ = loadModelSettings(taskFile, "model_settings", verbose);
   mpcSettings_ = mpc::loadSettings(taskFile, "mpc", verbose);
   ddpSettings_ = ddp::loadSettings(taskFile, "ddp", verbose);
@@ -100,7 +98,7 @@ LeggedInterface::LeggedInterface(const std::string& taskFile, const std::string&
 }
 
 /******************************************************************************************************/
-// Set up the model中文注释：设置模型，包括模型参数、初始状态、参考管理器等
+// Set up optimal control problem---设置最优控制问题
 /******************************************************************************************************/
 /******************************************************************************************************/
 void LeggedInterface::setupOptimalControlProblem(const std::string& taskFile, const std::string& urdfFile,
@@ -119,6 +117,7 @@ void LeggedInterface::setupOptimalControlProblem(const std::string& taskFile, co
 
   problemPtr_ = std::make_unique<OptimalControlProblem>();
 
+  // dynamics contraint---动力学约束
   std::unique_ptr<SystemDynamicsBase> dynamicsPtr;
   dynamicsPtr = std::make_unique<LeggedRobotDynamicsAD>(*pinocchioInterfacePtr_, centroidalModelInfo_, "dynamics",
                                                         modelSettings_);
@@ -169,7 +168,7 @@ void LeggedInterface::setupOptimalControlProblem(const std::string& taskFile, co
 }
 
 /******************************************************************************************************/
-// Get soft swing trajectory constraint中文注释：获取软摆动轨迹约束
+// Get soft swing trajectory constraint---得到软摆动轨迹约束
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::unique_ptr<StateInputCost>
@@ -192,10 +191,9 @@ LeggedInterface::getSoftSwingTrajConstraint(const EndEffectorKinematics<scalar_t
 }
 
 /******************************************************************************************************/
-// 设置模型中文注释：Set up the model
+// Set up the model---设置模型
 /******************************************************************************************************/
 /******************************************************************************************************/
-// 设置模型
 void LeggedInterface::setupModel(const std::string& taskFile, const std::string& urdfFile,
                                  const std::string& referenceFile, bool /*verbose*/)
 {
@@ -305,7 +303,7 @@ matrix_t LeggedInterface::initializeInputCostWeight(const std::string& taskFile,
 }
 
 /******************************************************************************************************/
-// Get base tracking cost中文注释：获取基座跟踪成本
+// Get base tracking cost---获取基本跟踪成本Q和R
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::unique_ptr<StateInputCost> LeggedInterface::getBaseTrackingCost(const std::string& taskFile,
@@ -331,7 +329,7 @@ std::unique_ptr<StateInputCost> LeggedInterface::getBaseTrackingCost(const std::
 }
 
 /******************************************************************************************************/
-// Get limit constraints中文注释：获取极限约束
+// Get limit constraints---获取限制约束
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::unique_ptr<StateInputCost> LeggedInterface::getLimitConstraints(const CentroidalModelInfo& info)
@@ -378,7 +376,7 @@ std::unique_ptr<StateInputCost> LeggedInterface::getLimitConstraints(const Centr
 }
 
 /******************************************************************************************************/
-// Load friction cone settings中文注释：加载摩擦锥设置
+// Load friction cone settings---加载摩擦锥设置
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::pair<scalar_t, RelaxedBarrierPenalty::Config>
@@ -407,7 +405,7 @@ LeggedInterface::loadFrictionConeSettings(const std::string& taskFile, bool verb
 }
 
 /******************************************************************************************************/
-// Get friction cone constraint中文注释：获取摩擦锥约束
+// Get friction cone constraint---获取摩擦锥约束
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::unique_ptr<StateInputConstraint> LeggedInterface::getFrictionConeConstraint(size_t contactPointIndex,
@@ -419,7 +417,7 @@ std::unique_ptr<StateInputConstraint> LeggedInterface::getFrictionConeConstraint
 }
 
 /******************************************************************************************************/
-// Get friction cone soft constraint中文注释：获取摩擦锥软约束
+// Get friction cone soft constraint---获取摩擦锥软约束
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::unique_ptr<StateInputCost> LeggedInterface::getFrictionConeSoftConstraint(
@@ -430,7 +428,7 @@ std::unique_ptr<StateInputCost> LeggedInterface::getFrictionConeSoftConstraint(
 }
 
 /******************************************************************************************************/
-// Get end-effector kinematics中文注释：获取末端执行器运动学
+// Get end-effector kinematics---获取末端执行器运动学
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::unique_ptr<EndEffectorKinematics<scalar_t>>
@@ -453,7 +451,7 @@ LeggedInterface::getEeKinematicsPtr(const std::vector<std::string>& footNames, c
 }
 
 /******************************************************************************************************/
-// Get zero velocity constraint中文注释：获取零速度约束
+// Get zero velocity constraint---获取零速度约束
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::unique_ptr<StateInputConstraint> LeggedInterface::getZeroVelocityConstraint(
@@ -478,7 +476,7 @@ std::unique_ptr<StateInputConstraint> LeggedInterface::getZeroVelocityConstraint
 }
 
 /******************************************************************************************************/
-// Get self collision constraint中文注释：获取自碰撞约束
+// Get self collision constraint---获取自碰撞约束
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::unique_ptr<StateCost> LeggedInterface::getSelfCollisionConstraint(const PinocchioInterface& pinocchioInterface,

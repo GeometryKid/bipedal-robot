@@ -46,7 +46,7 @@ namespace legged
 {
 bool LeggedController::init(hardware_interface::RobotHW* robot_hw, ros::NodeHandle& controller_nh)
 {
-  // Initialize OCS2
+  // Initialize OCS2---初始化OCS2
   std::string urdfFile;
   std::string taskFile;
   std::string referenceFile;
@@ -56,10 +56,11 @@ bool LeggedController::init(hardware_interface::RobotHW* robot_hw, ros::NodeHand
   bool verbose = false;
   loadData::loadCppDataType(taskFile, "legged_robot_interface.verbose", verbose);
 
-  setupLeggedInterface(taskFile, urdfFile, referenceFile, verbose);
-  setupMpc();
-  setupMrt();
-  // Visualization
+  setupLeggedInterface(taskFile, urdfFile, referenceFile, verbose); // 创建LeggedInterface对象并设置最优控制问题
+  setupMpc(); 
+  setupMrt(); // 开启MPC线程
+
+  // Visualization---可视化
   ros::NodeHandle nh;
   CentroidalModelPinocchioMapping pinocchioMapping(leggedInterface_->getCentroidalModelInfo());
   eeKinematicsPtr_ = std::make_shared<PinocchioEndEffectorKinematics>(
@@ -69,7 +70,7 @@ bool LeggedController::init(hardware_interface::RobotHW* robot_hw, ros::NodeHand
   selfCollisionVisualization_.reset(new LeggedSelfCollisionVisualization(
       leggedInterface_->getPinocchioInterface(), leggedInterface_->getGeometryInterface(), pinocchioMapping, nh));
 
-  //////////////////////////////////////////////////////////////////////////////////
+  /**********************************************************************************************************/
 
   pos_pub_ = controller_nh.advertise<std_msgs::Float64MultiArray>("joint_position", 10);
   vel_pub_ = controller_nh.advertise<std_msgs::Float64MultiArray>("joint_velocity", 10);
@@ -85,13 +86,13 @@ bool LeggedController::init(hardware_interface::RobotHW* robot_hw, ros::NodeHand
   mpc_force_pub_ = controller_nh.advertise<std_msgs::Float64MultiArray>("mpc_force", 12);
   wbc_force_pub_ = controller_nh.advertise<std_msgs::Float64MultiArray>("wbc_force", 12);
   cmd_actau_pub_ = controller_nh.advertise<std_msgs::Float64MultiArray>("cmd_joint_actorque", 10);
-  //////////////////////////////////////////////////////////////////////////////////
+  /**********************************************************************************************************/
 
 
   rbdConversions_ = std::make_shared<CentroidalModelRbdConversions>(leggedInterface_->getPinocchioInterface(),
                                                                     leggedInterface_->getCentroidalModelInfo());
 
-  // Hardware interface
+  // Hardware interface---硬件接口
   auto* hybridJointInterface = robot_hw->get<HybridJointInterface>();
 
   std::vector<std::string> joint_names{
@@ -104,28 +105,28 @@ bool LeggedController::init(hardware_interface::RobotHW* robot_hw, ros::NodeHand
   }
   imuSensorHandle_ = robot_hw->get<hardware_interface::ImuSensorInterface>()->getHandle("imu_link");
 
-  // State estimation
+  // State estimation---状态估计
   setupStateEstimate(taskFile, verbose);
 
-  // Whole body control
+  // Whole body control---全身控制
   wbc_ = std::make_shared<WeightedWbc>(leggedInterface_->getPinocchioInterface(),
                                        leggedInterface_->getCentroidalModelInfo(), *eeKinematicsPtr_, controller_nh);
   wbc_->loadTasksSetting(taskFile, verbose);
   wbc_->setStanceMode(true);
 
-  // Safety Checker
+  // Safety Checker---安全检查器
   safetyChecker_ = std::make_shared<SafetyChecker>(leggedInterface_->getCentroidalModelInfo());
 
-  // Configuring the hardware interface
+  // Configuring the hardware interface---配置硬件接口
   eeKinematicsPtr_->setPinocchioInterface(leggedInterface_->getPinocchioInterface());
 
-  // Reading relevant parameters
+  // Reading relevant parameters---读取相关参数
   RetrievingParameters();
 
-  // loadEigenMatrix
+  // loadEigenMatrix---加载矩阵
   loadData::loadEigenMatrix(referenceFile, "defaultJointState", defalutJointPos_);
 
-  // Configuring an inverse kinematics processing object
+  // Configuring an inverse kinematics processing object---配置逆运动学处理对象
   inverseKinematics_.setParam(std::make_shared<PinocchioInterface>(leggedInterface_->getPinocchioInterface()),
                               std::make_shared<CentroidalModelInfo>(leggedInterface_->getCentroidalModelInfo()));
 
@@ -138,7 +139,8 @@ void LeggedController::starting(const ros::Time& time)
 {
   startingTime_.fromSec(time.toSec() - 0.0001);
   const ros::Time shifted_time = time - startingTime_;
-  // Initial state
+
+  // Initial state---初始状态
   currentObservation_.state.setZero(stateDim_);
   currentObservation_.input.setZero(inputDim_);
   currentObservation_.state.segment(6 + 6, jointDim_) = defalutJointPos_;
@@ -148,44 +150,53 @@ void LeggedController::starting(const ros::Time& time)
                                          { currentObservation_.input });
 
   mpcMrtInterface_->getReferenceManager().setTargetTrajectories(target_trajectories);
-
+  
   mpcRunning_ = false;
 
-  // Mode Subscribe
+  // Mode Subscribe---话题订阅
   ModeSubscribe();
 
-  // Dynamic server
+  // Dynamic server---服务订阅
   serverPtr_ =
-      std::make_unique<dynamic_reconfigure::Server<legged_controllers::TutorialsConfig>>(ros::NodeHandle("controller"));
-  dynamic_reconfigure::Server<legged_controllers::TutorialsConfig>::CallbackType f;
-  f = boost::bind(&LeggedController::dynamicParamCallback, this, _1, _2);
-  serverPtr_->setCallback(f);
+      std::make_unique<dynamic_reconfigure::Server<legged_controllers::TutorialsConfig>>(ros::NodeHandle("controller")); // 创建动态配置服务器
+  dynamic_reconfigure::Server<legged_controllers::TutorialsConfig>::CallbackType f; // 定义回调函数类型
+  f = boost::bind(&LeggedController::dynamicParamCallback, this, _1, _2); // 动力学参数回调函数
+  serverPtr_->setCallback(f); // 设置回调函数
 }
 
-int number=20;
+int number=20; // 定义一个全局变量，用于记录当前步数
 void LeggedController::update(const ros::Time& time, const ros::Duration& period)
 { 
   const ros::Time shifted_time = time - startingTime_;
-  // State Estimate
+
+  // State Estimate---状态估计
   updateStateEstimation(shifted_time, period);
   std::vector<matrix_t> Jfoot = stateEstimate_->getJacobifoot();
-  // Update the current state of the system
+
+  // Update the current state of the system---更新系统的当前状态
   // mpcMrtInterface_ = std::make_shared<MPC_MRT_Interface>(*mpc_);
   mpcMrtInterface_->setCurrentObservation(currentObservation_);
 
-  // Evaluate the current policy
+  // Evaluate the current policy---评估当前策略
   vector_t optimizedState(stateDim_), optimizedInput(inputDim_);
   size_t plannedMode = 0;
   bool mpc_updated_ = false;
 
-  if (firstStartMpc_)
-  {//当mpc开启了会一直firstStartMpc_ = true
-  //std::cout << "First Start MPC" << std::endl;
-    // Load the latest MPC policy
+  if (firstStartMpc_) // 当mpc开启了会一直firstStartMpc_ = true
+  {
+    // std::cout << "First Start MPC" << std::endl;
+
+    // Load the latest MPC policy---加载最新的MPC策略
     mpcMrtInterface_->updatePolicy();
-    //获取mpc已经计算完的计算结果
-    mpcMrtInterface_->evaluatePolicy(currentObservation_.time, currentObservation_.state, optimizedState,
-                                     optimizedInput, plannedMode);
+    // 获取mpc已经计算完的计算结果
+    mpcMrtInterface_->evaluatePolicy
+    (
+      currentObservation_.time, 
+      currentObservation_.state, 
+      optimizedState,
+      optimizedInput, 
+      plannedMode
+    );
     currentObservation_.input = optimizedInput;
     mpc_updated_ = true;
   }
@@ -204,7 +215,7 @@ void LeggedController::update(const ros::Time& time, const ros::Duration& period
     vector_t tor2 = Jfoot[2].transpose() * mpc_planned_joint_force2;
     vector_t tor3 = Jfoot[3].transpose() * mpc_planned_joint_force3;
 
-     if (mpc_planned_joint_force0[2] < 0)
+    if (mpc_planned_joint_force0[2] < 0)
       tor0.setZero();
     if (mpc_planned_joint_force1[2] < 0)
       tor1.setZero();
@@ -215,18 +226,16 @@ void LeggedController::update(const ros::Time& time, const ros::Duration& period
 
     vector_t torall = -(tor0 + tor1 + tor2 + tor3);
 
-   // std::cout << "torall: " << torall << std::endl;
+    // std::cout << "torall: " << torall << std::endl;
   
-  //loadControllerFlag_  setWalkFlag_
-  /**/
-  if(setWalkFlag_)
-  {//行走
-   // wbc_->setStanceMode(false);
+  if(setWalkFlag_) // loadControllerFlag_  setWalkFlag_
+  {
+    // wbc_->setStanceMode(false);
     optimizedState.setZero();
     optimizedState.segment(6, 6) = currentObservation_.state.segment<6>(6);
     optimizedState.segment(6 + 6, jointDim_) = defalutJointPos_;
-  //  std::cerr<<"defalutJointPos_: "<<defalutJointPos_.transpose()<<std::endl;
-    //std::cerr << "setWalkFlag_6778786"<< std::endl;
+    // std::cerr<<"defalutJointPos_: "<<defalutJointPos_.transpose()<<std::endl;
+    // std::cerr << "setWalkFlag_6778786"<< std::endl;
   }
   else
   { 
@@ -236,35 +245,38 @@ void LeggedController::update(const ros::Time& time, const ros::Duration& period
     optimizedState.segment(6 + 6, jointDim_) = defalutJointPos_;
 
     plannedMode = 3;
-  //  wbc_->setStanceMode(true);
+    // wbc_->setStanceMode(true);
   }
-  //const vector_t& mpc_planned_body_pos = optimizedState.segment(6, 6);
- // const vector_t& mpc_planned_joint_pos = optimizedState.segment(6 + 6, jointDim_);
- // const vector_t& mpc_planned_joint_vel = optimizedInput.segment(12, jointDim_);
+  // const vector_t& mpc_planned_body_pos = optimizedState.segment(6, 6);
+  // const vector_t& mpc_planned_joint_pos = optimizedState.segment(6 + 6, jointDim_);
+  // const vector_t& mpc_planned_joint_vel = optimizedInput.segment(12, jointDim_);
 
   vector_t mpc_planned_body_pos = optimizedState.segment(6, 6);
   vector_t mpc_planned_joint_pos = optimizedState.segment(6 + 6, jointDim_);
   vector_t mpc_planned_joint_vel = optimizedInput.segment(12, jointDim_);
   // std::cerr<<"足底力："<<optimizedInput.segment(0,3)<<std::endl;
-  // WBC
-  /*wbcTimer_.startTimer();
-  vector_t x = wbc_->update(optimizedState, optimizedInput, measuredRbdState_, plannedMode, period.toSec());
-  const vector_t& wbc_planned_torque = x.tail(jointDim_);
-  const vector_t& wbc_planned_joint_acc = x.segment(6, jointDim_);
-  const vector_t& wbc_planned_body_acc = x.head(6);
-  const vector_t& wbc_planned_contact_force = x.segment(6 + jointDim_, wbc_->getContactForceSize());
-  wbcTimer_.endTimer();
 
-  posDes_ = centroidal_model::getJointAngles(optimizedState, leggedInterface_->getCentroidalModelInfo());
-  velDes_ = centroidal_model::getJointVelocities(optimizedInput, leggedInterface_->getCentroidalModelInfo());
+  // WBC---全身控制
+  /*
+    wbcTimer_.startTimer();
+    vector_t x = wbc_->update(optimizedState, optimizedInput, measuredRbdState_, plannedMode, period.toSec());
+    const vector_t& wbc_planned_torque = x.tail(jointDim_);
+    const vector_t& wbc_planned_joint_acc = x.segment(6, jointDim_);
+    const vector_t& wbc_planned_body_acc = x.head(6);
+    const vector_t& wbc_planned_contact_force = x.segment(6 + jointDim_, wbc_->getContactForceSize());
+    wbcTimer_.endTimer();
 
-  scalar_t dt = period.toSec();
-  posDes_ = posDes_ + 0.5 * wbc_planned_joint_acc * dt * dt;
+    posDes_ = centroidal_model::getJointAngles(optimizedState, leggedInterface_->getCentroidalModelInfo());
+    velDes_ = centroidal_model::getJointVelocities(optimizedInput, leggedInterface_->getCentroidalModelInfo());
 
-  velDes_ = velDes_ + wbc_planned_joint_acc * dt;*/
+    scalar_t dt = period.toSec();
+    posDes_ = posDes_ + 0.5 * wbc_planned_joint_acc * dt * dt;
+
+    velDes_ = velDes_ + wbc_planned_joint_acc * dt;
+  */
 
   vector_t output_torque(jointDim_);
-  //*********************** Set Joint Command: Normal Tracking *****************************//
+  //*********************** Set Joint Command: Normal Tracking---设置关节命令：正常跟踪 ************************//
   std_msgs::Float64MultiArray ctrl_pos_msg, ctrl_vel_msg, ctrl_tau_msg;
   std_msgs::Float64MultiArray ctrl_actau_msg;
   ctrl_pos_msg.data.resize(10);
@@ -278,7 +290,7 @@ void LeggedController::update(const ros::Time& time, const ros::Duration& period
 
   for (size_t j = 0; j < jointDim_; ++j)
   {
-    //"Limit protection
+    // Limit protection---限位保护
     const auto& model = leggedInterface_->getPinocchioInterface().getModel();
     double lower_bound = model.lowerPositionLimit(6 + j);
     double upper_bound = model.upperPositionLimit(6 + j);
@@ -322,7 +334,12 @@ void LeggedController::update(const ros::Time& time, const ros::Duration& period
     {//还没有使能控制器  
       if (j == 4 || j == 9)
       {
-        hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j], mpc_planned_joint_vel[j], kp_position, kd_position, 0);
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j], 
+          mpc_planned_joint_vel[j], 
+          kp_position, 
+          kd_position, 
+          0);
       }
       else
       {
@@ -336,108 +353,144 @@ void LeggedController::update(const ros::Time& time, const ros::Duration& period
     
       ctrl_pos_msg.data[j] = mpc_planned_joint_pos[j];
       ctrl_vel_msg.data[j] = mpc_planned_joint_vel[j];
-     // ctrl_tau_msg.data[j] = wbc_planned_torque(j);
+      // ctrl_tau_msg.data[j] = wbc_planned_torque(j);
       ctrl_tau_msg.data[j] = torall[6 + j];
-      //std::cerr<<j<<": "<<torall[6 + j]<<std::endl;
-     // ctrl_tau_msg.data[j] = mpc_planned_joint_tau(j);
+      // std::cerr<<j<<": "<<torall[6 + j]<<std::endl;
+      // ctrl_tau_msg.data[j] = mpc_planned_joint_tau(j);
 
-     if(j == 0)
-     {    
-       hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j],  mpc_planned_joint_vel[j],
-                                        cmdContactFlag[int(j / 5)] ? kp_hip_pitch_stance : kp_hip_pitch_swing,
-                                        cmdContactFlag[int(j / 5)] ? kd_hip_pitch_stance : kd_hip_pitch_swing,
-                                        torall[6 + j]);  
-       //hybridJointHandles_[j].setCommand(-0.4,  mpc_planned_joint_vel[j],
-       // cmdContactFlag[int(j / 5)] ? kp_hip_pitch_stance : kp_hip_pitch_swing,
-       // cmdContactFlag[int(j / 5)] ? kd_hip_pitch_stance : kd_hip_pitch_swing,
-      //  torall[6 + j]); 
-     }
-     else if(j ==1)
-     {  
-       hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j], mpc_planned_joint_vel[j],
-                                      cmdContactFlag[int(j / 5)] ? kp_hip_roll_stance : kp_hip_roll_swing, kd_hip_roll,
-                                       torall[6 + j]); 
-        //hybridJointHandles_[j].setCommand(0.0, mpc_planned_joint_vel[j],
-       //   cmdContactFlag[int(j / 5)] ? kp_hip_roll_stance : kp_hip_roll_swing, kd_hip_roll,
-       //   torall[6 + j]); 
-     }
-     else if(j == 2 )
-     {
-        hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j], mpc_planned_joint_vel[j],
-                                        cmdContactFlag[int(j / 5)] ? kp_hip_yaw_stance : kp_hip_yaw_swing, kd_hip_yaw,
-                                        torall[6 + j]); 
+      if(j == 0)
+      {    
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j],  
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_hip_pitch_stance : kp_hip_pitch_swing,
+          cmdContactFlag[int(j / 5)] ? kd_hip_pitch_stance : kd_hip_pitch_swing,
+          torall[6 + j]
+        );  
+        // hybridJointHandles_[j].setCommand(-0.4,  mpc_planned_joint_vel[j],
+        // cmdContactFlag[int(j / 5)] ? kp_hip_pitch_stance : kp_hip_pitch_swing,
+        // cmdContactFlag[int(j / 5)] ? kd_hip_pitch_stance : kd_hip_pitch_swing,
+        // torall[6 + j]); 
+      }
+      else if(j ==1)
+      {  
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j], 
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_hip_roll_stance : kp_hip_roll_swing, 
+          kd_hip_roll,
+          torall[6 + j]
+        ); 
         // hybridJointHandles_[j].setCommand(0.0, mpc_planned_joint_vel[j],
-        //  cmdContactFlag[int(j / 5)] ? kp_hip_yaw_stance : kp_hip_yaw_swing, kd_hip_yaw,
-        //  torall[6 + j]);
-     }
-     else if(j == 3)
-     {    
-       hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j], mpc_planned_joint_vel[j],
-                                       cmdContactFlag[int(j / 5)] ? kp_knee_stance : kp_knee_swing, kd_knee,
-                                       torall[6 + j]); 
-        //hybridJointHandles_[j].setCommand(0.8, mpc_planned_joint_vel[j],
-        //  cmdContactFlag[int(j / 5)] ? kp_knee_stance : kp_knee_swing, kd_knee,
-        //  torall[6 + j]);
-     }
-     else if(j == 4 )
-     {   
-        hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j], mpc_planned_joint_vel[j],
-                                       cmdContactFlag[int(j / 5)] ? kp_feet_stance : kp_feet_swing, kd_feet,
-                                       torall[6 + j]); 
-         //hybridJointHandles_[j].setCommand(-0.4 ,mpc_planned_joint_vel[j],
-         // cmdContactFlag[int(j / 5)] ? kp_feet_stance : kp_feet_swing, kd_feet,
-        //  torall[6 + j]); 
-     }
+        // cmdContactFlag[int(j / 5)] ? kp_hip_roll_stance : kp_hip_roll_swing, kd_hip_roll,
+        // torall[6 + j]); 
+      }
+      else if(j == 2 )
+      {
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j], 
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_hip_yaw_stance : kp_hip_yaw_swing, 
+          kd_hip_yaw,
+          torall[6 + j]
+        ); 
+        // hybridJointHandles_[j].setCommand(0.0, mpc_planned_joint_vel[j],
+        // cmdContactFlag[int(j / 5)] ? kp_hip_yaw_stance : kp_hip_yaw_swing, kd_hip_yaw,
+        // torall[6 + j]);
+      }
+      else if(j == 3)
+      {    
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j], 
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_knee_stance : kp_knee_swing, 
+          kd_knee,
+          torall[6 + j]
+        ); 
+        // hybridJointHandles_[j].setCommand(0.8, mpc_planned_joint_vel[j],
+        // cmdContactFlag[int(j / 5)] ? kp_knee_stance : kp_knee_swing, kd_knee,
+        // torall[6 + j]);
+      }
+      else if(j == 4 )
+      {   
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j], 
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_feet_stance : kp_feet_swing, 
+          kd_feet,
+          torall[6 + j]
+        ); 
+        // hybridJointHandles_[j].setCommand(-0.4 ,mpc_planned_joint_vel[j],
+        // cmdContactFlag[int(j / 5)] ? kp_feet_stance : kp_feet_swing, kd_feet,
+        // torall[6 + j]); 
+      }
 
-
-     if(j == 5)
-     {    
-       hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j],  mpc_planned_joint_vel[j],
-                                        cmdContactFlag[int(j / 5)] ? kp_hip_pitch_stance : kp_hip_pitch_swing,
-                                        cmdContactFlag[int(j / 5)] ? kd_hip_pitch_stance : kd_hip_pitch_swing,
-                                        torall[6 + j]);  
-         //hybridJointHandles_[j].setCommand(-0.4,  mpc_planned_joint_vel[j],
-        //  cmdContactFlag[int(j / 5)] ? kp_hip_pitch_stance : kp_hip_pitch_swing,
-        //  cmdContactFlag[int(j / 5)] ? kd_hip_pitch_stance : kd_hip_pitch_swing,
-        //  torall[6 + j]);  
-     }
-
-     else if(j ==6)
-     {  
-       hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j], mpc_planned_joint_vel[j],
-                                       cmdContactFlag[int(j / 5)] ? kp_hip_roll_stance : kp_hip_roll_swing, kd_hip_roll,
-                                       torall[6 + j]); 
-        //hybridJointHandles_[j].setCommand(0.0, mpc_planned_joint_vel[j],
-        //  cmdContactFlag[int(j / 5)] ? kp_hip_roll_stance : kp_hip_roll_swing, kd_hip_roll,
-        //  torall[6 + j]); 
-     }
-     else if(j == 7)
-     {
-        hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j], mpc_planned_joint_vel[j],
-                                        cmdContactFlag[int(j / 5)] ? kp_hip_yaw_stance : kp_hip_yaw_swing, kd_hip_yaw,
-                                        torall[6 + j]); 
-          //hybridJointHandles_[j].setCommand(0.0, mpc_planned_joint_vel[j],
-          //  cmdContactFlag[int(j / 5)] ? kp_hip_yaw_stance : kp_hip_yaw_swing, kd_hip_yaw,
-          //  torall[6 + j]);
-     }
-     else if(j == 8)
-     {    
-       hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j], mpc_planned_joint_vel[j],
-                                       cmdContactFlag[int(j / 5)] ? kp_knee_stance : kp_knee_swing, kd_knee,
-                                       torall[6 + j]); 
-        //hybridJointHandles_[j].setCommand(0.8, mpc_planned_joint_vel[j],
-        //  cmdContactFlag[int(j / 5)] ? kp_knee_stance : kp_knee_swing, kd_knee,
-        //  torall[6 + j]);
-     }
-     else if(j == 9)
-     {   
-        hybridJointHandles_[j].setCommand(mpc_planned_joint_pos[j], mpc_planned_joint_vel[j],
-                                       cmdContactFlag[int(j / 5)] ? kp_feet_stance : kp_feet_swing, kd_feet,
-                                       torall[6 + j]); 
-        //hybridJointHandles_[j].setCommand(-0.4, mpc_planned_joint_vel[j],
-        //  cmdContactFlag[int(j / 5)] ? kp_feet_stance : kp_feet_swing, kd_feet,
-        //  torall[6 + j]);
-     }
+      if(j == 5)
+      {    
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j],  
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_hip_pitch_stance : kp_hip_pitch_swing,
+          cmdContactFlag[int(j / 5)] ? kd_hip_pitch_stance : kd_hip_pitch_swing,
+          torall[6 + j]
+        );  
+        // hybridJointHandles_[j].setCommand(-0.4,  mpc_planned_joint_vel[j],
+        // cmdContactFlag[int(j / 5)] ? kp_hip_pitch_stance : kp_hip_pitch_swing,
+        // cmdContactFlag[int(j / 5)] ? kd_hip_pitch_stance : kd_hip_pitch_swing,
+        // torall[6 + j]);  
+      }
+      else if(j ==6)
+      {  
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j], 
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_hip_roll_stance : kp_hip_roll_swing, 
+          kd_hip_roll,
+          torall[6 + j]
+        ); 
+        // hybridJointHandles_[j].setCommand(0.0, mpc_planned_joint_vel[j],
+        // cmdContactFlag[int(j / 5)] ? kp_hip_roll_stance : kp_hip_roll_swing, kd_hip_roll,
+        // torall[6 + j]); 
+      }
+      else if(j == 7)
+      {
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j], 
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_hip_yaw_stance : kp_hip_yaw_swing, 
+          kd_hip_yaw,
+          torall[6 + j]
+        ); 
+        // hybridJointHandles_[j].setCommand(0.0, mpc_planned_joint_vel[j],
+        // cmdContactFlag[int(j / 5)] ? kp_hip_yaw_stance : kp_hip_yaw_swing, kd_hip_yaw,
+        // torall[6 + j]);
+      }
+      else if(j == 8)
+      {    
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j], 
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_knee_stance : kp_knee_swing, 
+          kd_knee,
+          torall[6 + j]
+        ); 
+        // hybridJointHandles_[j].setCommand(0.8, mpc_planned_joint_vel[j],
+        // cmdContactFlag[int(j / 5)] ? kp_knee_stance : kp_knee_swing, kd_knee,
+        // torall[6 + j]);
+      }
+      else if(j == 9)
+      {   
+        hybridJointHandles_[j].setCommand(
+          mpc_planned_joint_pos[j], 
+          mpc_planned_joint_vel[j],
+          cmdContactFlag[int(j / 5)] ? kp_feet_stance : kp_feet_swing, 
+          kd_feet,
+          torall[6 + j]
+        ); 
+        // hybridJointHandles_[j].setCommand(-0.4, mpc_planned_joint_vel[j],
+        // cmdContactFlag[int(j / 5)] ? kp_feet_stance : kp_feet_swing, kd_feet,
+        // torall[6 + j]);
+      }
           
       if (emergencyStopFlag_)
       {
@@ -487,16 +540,16 @@ void LeggedController::update(const ros::Time& time, const ros::Duration& period
     mpc_force_msg.data[i]=optimizedInput[i];
 
   }
-  //std::cout<<"wbc_force: "<<std::endl;
- // for(size_t i = 0; i < 12; ++i)
- // {
+  // std::cout<<"wbc_force: "<<std::endl;
+  // for(size_t i = 0; i < 12; ++i)
+  // {
   //   wbc_force_msg.data[i]=wbc_planned_contact_force[i];
   //  std::cout<<wbc_planned_contact_force[i]<<" ";
- // }
- // std::cout<<std::endl;
+  // }
+  // std::cout<<std::endl;
   
   mpc_force_pub_.publish(mpc_force_msg);
-//wbc_force_pub_.publish(wbc_force_msg);
+  // wbc_force_pub_.publish(wbc_force_msg);
 }
 
 void LeggedController::updateStateEstimation(const ros::Time& time, const ros::Duration& period)
@@ -508,7 +561,7 @@ void LeggedController::updateStateEstimation(const ros::Time& time, const ros::D
   vector3_t angularVel, linearAccel;
   matrix3_t orientationCovariance, angularVelCovariance, linearAccelCovariance;
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /**************************************************************************************************/
 
   std_msgs::Float64MultiArray torque_msg, pos_msg, vel_msg;
   torque_msg.data.resize(10);
@@ -540,7 +593,7 @@ void LeggedController::updateStateEstimation(const ros::Time& time, const ros::D
   pose_stamped.pose.orientation.w = 1.0;
   pose_stamped.header.stamp = ros::Time::now(); 
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /***************************************************************************************************/
   
   cmdContactFlag = modeNumber2StanceLeg(
       mpcMrtInterface_->getReferenceManager().getModeSchedule().modeAtTime(currentObservation_.time));
@@ -653,22 +706,37 @@ LeggedController::~LeggedController()
 void LeggedController::setupLeggedInterface(const std::string& taskFile, const std::string& urdfFile,
                                             const std::string& referenceFile, bool verbose)
 {
-  leggedInterface_ = std::make_shared<LeggedInterface>(taskFile, urdfFile, referenceFile);
-  leggedInterface_->setupOptimalControlProblem(taskFile, urdfFile, referenceFile, verbose);
+  leggedInterface_ = std::make_shared<LeggedInterface>(taskFile, urdfFile, referenceFile); // 创建LeggedInterface对象
+  leggedInterface_->setupOptimalControlProblem(taskFile, urdfFile, referenceFile, verbose); // 设置最优控制问题
 }
+
 
 void LeggedController::setupMpc()
 {
-  mpc_ = std::make_shared<SqpMpc>(leggedInterface_->mpcSettings(), leggedInterface_->sqpSettings(),
-                                  leggedInterface_->getOptimalControlProblem(), leggedInterface_->getInitializer());
+  // SqpMpc对象的创建---Creating the SqpMpc object(MPC、SQP、OCP、初始化)
+  mpc_ = std::make_shared<SqpMpc>
+  (
+    leggedInterface_->mpcSettings(),              // MPC 配置(时间范围,频率)
+    leggedInterface_->sqpSettings(),              // SQP 求解器参数
+    leggedInterface_->getOptimalControlProblem(), // OCP 代价函数和约束
+    leggedInterface_->getInitializer()            // 初始化策略
+  );         
 
-  const std::string robotName = "legged_robot";
+  const std::string robotName = "legged_robot"; // 机器人名称
   ros::NodeHandle nh;
-  auto rosReferenceManagerPtr =
-      std::make_shared<RosReferenceManager>(robotName, leggedInterface_->getReferenceManagerPtr());
-  rosReferenceManagerPtr->subscribe(nh);
-  mpc_->getSolverPtr()->setReferenceManager(rosReferenceManagerPtr);
-  observationPublisher_ = nh.advertise<ocs2_msgs::mpc_observation>(robotName + "_mpc_observation", 1);
+  // 使用Reference manager
+  auto rosReferenceManagerPtr = std::make_shared<RosReferenceManager>
+  (
+    robotName, 
+    leggedInterface_->getReferenceManagerPtr()
+  ); 
+
+  // 连接reference manager---连接参考管理器
+  rosReferenceManagerPtr->subscribe(nh); // 订阅reference manager话题
+  mpc_->getSolverPtr()->setReferenceManager(rosReferenceManagerPtr); // 设置MPC的参考管理器
+  
+  // observation publisher---观测话题发布者
+  observationPublisher_ = nh.advertise<ocs2_msgs::mpc_observation>(robotName + "_mpc_observation", 1); // 创建MPC观测话题发布者
 }
 
 void LeggedController::setupMrt()
@@ -677,7 +745,9 @@ void LeggedController::setupMrt()
   mpcMrtInterface_->initRollout(&leggedInterface_->getRollout());
   mpcTimer_.reset();
   controllerRunning_ = true;
-  mpcThread_ = std::thread([&]() {
+  // MPC thread---MPC线程
+  mpcThread_ = std::thread([&]() 
+  {
     while (controllerRunning_)
     {
       try
@@ -687,14 +757,15 @@ void LeggedController::setupMrt()
               if (mpcRunning_)//mpcRunning_和loadControllerFlag_通过loadControllerCallback回调函数置1
               {
                 mpcTimer_.startTimer();
-                //运行mpc计算 mpc_.run(currentObservation.time, currentObservation.state);
-                mpcMrtInterface_->advanceMpc();
+                // 运行mpc计算 mpc_.run(currentObservation.time, currentObservation.state);
+                mpcMrtInterface_->advanceMpc(); // 求解优化问题
                 mpcTimer_.endTimer();
                 firstStartMpc_ = true;
               }
             },
-            leggedInterface_->mpcSettings().mpcDesiredFrequency_);
+            leggedInterface_->mpcSettings().mpcDesiredFrequency_); // ~50HZ
       }
+      // 异常处理
       catch (const std::exception& e)
       {
         controllerRunning_ = false;
@@ -760,16 +831,18 @@ void LeggedController::resetMPC()
                                          { currentObservation_.input });
   mpcMrtInterface_->resetMpcNode(target_trajectories);
 }
+
+// 话题订阅
 void LeggedController::ModeSubscribe()
 {
   subSetWalk_ =
-      ros::NodeHandle().subscribe<std_msgs::Float32>("/set_walk", 1, &LeggedController::setWalkCallback, this);
+      ros::NodeHandle().subscribe<std_msgs::Float32>("/set_walk", 1, &LeggedController::setWalkCallback, this); // 设置行走模式
   subLoadcontroller_ = ros::NodeHandle().subscribe<std_msgs::Float32>("/load_controller", 1,
-                                                                      &LeggedController::loadControllerCallback, this);
+                                                                      &LeggedController::loadControllerCallback, this); // 加载控制器
   subEmgstop_ = ros::NodeHandle().subscribe<std_msgs::Float32>("/emergency_stop", 1,
-                                                               &LeggedController::EmergencyStopCallback, this);
+                                                               &LeggedController::EmergencyStopCallback, this); // 紧急停止
   subResetTarget_ = ros::NodeHandle().subscribe<std_msgs::Float32>("/reset_estimation", 1,
-                                                                  &LeggedController::ResetTargetCallback, this);                                                               
+                                                                  &LeggedController::ResetTargetCallback, this); // 重置目标                                                    
 }
 
 void LeggedController::EmergencyStopCallback(const std_msgs::Float32::ConstPtr& msg)

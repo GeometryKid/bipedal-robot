@@ -142,14 +142,14 @@ rollout
 
 mpc
 {
-  timeHorizon                     1.2  ; [s]
-  solutionTimeWindow              -1   ; maximum [s]
-  coldStart                       false
+  timeHorizon                     1.2  ; [s]          # 预测时间范围(秒) 
+  solutionTimeWindow              -1   ; maximum [s]  # 求解时间范围(秒)(-1表示不限制求解时间)
+  coldStart                       false               # 是否冷启动
 
-  debugPrint                      false
+  debugPrint                      false               # 是否打印调试信息
 
-  mpcDesiredFrequency             100  ; [Hz]
-  mrtDesiredFrequency             1000 ; [Hz] Useless
+  mpcDesiredFrequency             100  ; [Hz]         # MPC期望频率
+  mrtDesiredFrequency             1000 ; [Hz] Useless # MRT期望频率
 }
 
 initialState
