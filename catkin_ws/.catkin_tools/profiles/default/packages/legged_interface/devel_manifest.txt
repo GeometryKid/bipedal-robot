@@ -1,7 +1,0 @@
-legged_interface
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_interface/lib/liblegged_interface.so /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/liblegged_interface.so
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_interface/lib/legged_interface/legged_robot_dummy /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/legged_interface/legged_robot_dummy
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_interface/lib/legged_interface/legged_robot_sqp_mpc /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/legged_interface/legged_robot_sqp_mpc
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_interface/lib/pkgconfig/legged_interface.pc /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/pkgconfig/legged_interface.pc
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_interface/share/legged_interface/cmake/legged_interfaceConfig-version.cmake /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/legged_interface/cmake/legged_interfaceConfig-version.cmake
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_interface/share/legged_interface/cmake/legged_interfaceConfig.cmake /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/legged_interface/cmake/legged_interfaceConfig.cmake
