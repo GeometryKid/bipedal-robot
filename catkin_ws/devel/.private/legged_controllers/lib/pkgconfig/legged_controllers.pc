@@ -1,8 +1,0 @@
-prefix=/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_controllers
-
-Name: legged_controllers
-Description: Description of legged_controllers
-Version: 0.0.0
-Cflags: -I/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_controllers/include -I/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/src/legged_controllers/include
-Libs: -L${prefix}/lib -llegged_controllers
-Requires: roscpp legged_common legged_interface legged_wbc legged_estimation controller_interface ocs2_legged_robot_ros ocs2_self_collision_visualization angles dynamic_reconfigure rospy std_msgs message_generation

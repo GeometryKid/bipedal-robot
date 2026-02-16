@@ -1,6 +1,0 @@
-devel_space: /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel
-install: false
-install_space: /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/install
-profile: default
-source_space: /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/src
-workspace: /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws
