@@ -1,6 +1,6 @@
 ## bipedal-robot
 
-该程序是没有手臂版本。
+该程序是钣金达妙版本。
 
 该程序跑在ubuntu20.04上，使用ROS1-Noetic，需要x86架构电脑，**比较吃cpu**。
 
@@ -90,7 +90,7 @@ cd ~/ocs2_ws/src
  git clone https://github.com/ANYbotics/grid_map.git
  git clone https://github.com/leggedrobotics/ocs2.git
 ```
-![](./src/docs/catalog_folder.png)
+![](./docs/catalog_folder.png)
 
 3. 编译Raisim
 ```shell
@@ -177,7 +177,7 @@ source .bashrc
 ```shell
 roslaunch ocs2_legged_robot_ros legged_robot_ddp.launch
 ```
-<img src="./src/docs/leg_example.png" width="500" height="auto">
+<img src="./docs/leg_example.png" width="500" height="auto">
 
 OCS2安装成功！！！！
 
@@ -189,7 +189,7 @@ mkdir -p ~/catkin_ws
 cd ~/catkin_ws
 ```
 然后把gitee上的src文件夹放到catkin_ws目录下，如下所示（不能有其他东西）
-![](./src/docs/src.png)
+![](./docs/src.png)
 
 打开终端，输入：
 ```shell
@@ -217,7 +217,7 @@ source .bashrc
 ```shell
 roslaunch legged_controllers one_start_gazebo.launch
 ```
-<img src="./src/docs/sim.png" width="600" height="auto">
+<img src="./docs/sim.png" width="600" height="auto">
 
 2. 在rqt里面设置***kp_position=100***, ***kd_position=1***，然后在gazebo里按住键盘***Ctrl+Shift+R***让机器人站起来。
 
@@ -229,7 +229,7 @@ rostopic pub --once /reset_estimation std_msgs/Float32 "data: 0.0"
 ```bash
 rosrun rqt_robot_steering rqt_robot_steering 
 ```
-<img src="./src/docs/vel.png" width="300" height="auto">
+<img src="./docs/vel.png" width="300" height="auto">
 
 5. 新建一个终端，开启控制器：
 ```shell
@@ -250,7 +250,7 @@ roslaunch legged_controllers one_start_gazebo.launch
 
 后面的步骤就使用遥控器按键，每一个按键对应一个话题，对应关系如下图所示：
 
-<img src="./src/docs/handle.png" width="500" height="auto">
+<img src="./docs/handle.png" width="500" height="auto">
 
 ### 实机
 
@@ -262,7 +262,7 @@ roslaunch legged_controllers one_start_gazebo.launch
 cd
 ls /dev/ttyACM*
 ```
-<img src="./src/docs/dev2.png" width="450" height="auto">
+<img src="./docs/dev2.png" width="450" height="auto">
 
 ***注意：/dev/ttyACM0是单片机设备，/dev/ttyACM1是IMU设备，两者要各自对应***
 
