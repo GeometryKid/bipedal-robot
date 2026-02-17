@@ -1,8 +1,0 @@
-prefix=/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/yesense_serial
-
-Name: yesense_serial
-Description: Description of yesense_serial
-Version: 1.2.1
-Cflags: -I/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/src/yesense_ros/rosserial/include
-Libs: -L${prefix}/lib -lyesense_serial -lrt -lpthread
-Requires: 

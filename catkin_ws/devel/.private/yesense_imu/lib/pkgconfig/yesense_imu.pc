@@ -1,8 +1,0 @@
-prefix=/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/yesense_imu
-
-Name: yesense_imu
-Description: Description of yesense_imu
-Version: 0.0.2
-Cflags: -I/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/yesense_imu/include
-Libs: -L${prefix}/lib 
-Requires: message_runtime roscpp geometry_msgs sensor_msgs serial std_msgs std_srvs tf using_markers visualization_msgs

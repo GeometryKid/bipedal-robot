@@ -1,3 +1,0 @@
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/build/qpoases_catkin/_deps/qpoasesdownload-subbuild/CMakeFiles/rebuild_cache.dir
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/build/qpoases_catkin/_deps/qpoasesdownload-subbuild/CMakeFiles/edit_cache.dir
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/build/qpoases_catkin/_deps/qpoasesdownload-subbuild/CMakeFiles/qpoasesdownload-populate.dir
