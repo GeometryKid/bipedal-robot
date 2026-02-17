@@ -1,8 +1,0 @@
-[01m[K/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/src/legged_interface/src/LeggedInterface.cpp:50:1:[m[K [01;31m[Kerror: [m[Kexpected unqualified-id before ‘[01m[K/=[m[K’ token
-   50 | [01;31m[K/=[m[K=============================================================================/
-      | [01;31m[K^~[m[K
-compilation terminated due to -Wfatal-errors.
-make[2]: *** [CMakeFiles/legged_interface.dir/build.make:245：CMakeFiles/legged_interface.dir/src/LeggedInterface.cpp.o] 错误 1
-make[2]: *** 正在等待未完成的任务....
-make[1]: *** [CMakeFiles/Makefile2:363：CMakeFiles/legged_interface.dir/all] 错误 2
-make: *** [Makefile:141：all] 错误 2

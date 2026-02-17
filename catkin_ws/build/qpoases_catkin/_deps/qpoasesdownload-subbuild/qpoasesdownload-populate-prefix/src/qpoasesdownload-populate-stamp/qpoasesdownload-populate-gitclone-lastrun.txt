@@ -1,3 +1,0 @@
-repository='https://github.com/coin-or/qpOASES'
-module=''
-tag='origin'

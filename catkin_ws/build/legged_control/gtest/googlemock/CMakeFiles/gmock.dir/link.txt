@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -O2 -g -DNDEBUG  -shared -Wl,-soname,libgmock.so -o ../lib/libgmock.so CMakeFiles/gmock.dir/src/gmock-all.cc.o  -Wl,-rpath,/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/build/legged_control/gtest/lib ../lib/libgtest.so -lpthread 

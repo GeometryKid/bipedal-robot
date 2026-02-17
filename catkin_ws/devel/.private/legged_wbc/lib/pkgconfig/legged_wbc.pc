@@ -1,8 +1,0 @@
-prefix=/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_wbc
-
-Name: legged_wbc
-Description: Description of legged_wbc
-Version: 0.0.0
-Cflags: -I/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_wbc/include -I/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/src/legged_wbc/include -I/home/keaton/ocs2_ws/devel/include -I/usr/include/eigen3
-Libs: -L${prefix}/lib -llegged_wbc -lpinocchio -lboost_filesystem -lboost_serialization -lboost_system -lurdfdom_sensor -lurdfdom_model_state -lurdfdom_model -lurdfdom_world -lconsole_bridge -lhpp-fcl -loctomap -loctomath
-Requires: message_runtime std_msgs roscpp legged_interface

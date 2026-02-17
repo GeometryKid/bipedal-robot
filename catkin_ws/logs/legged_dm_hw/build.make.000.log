@@ -1,5 +1,0 @@
-[35m[1mScanning dependencies of target legged_dm_hw[0m
-[ 66%] [32mBuilding CXX object CMakeFiles/legged_dm_hw.dir/src/DmHW.cpp.o[0m
-[ 66%] [32mBuilding CXX object CMakeFiles/legged_dm_hw.dir/src/legged_dm_hw.cpp.o[0m
-[100%] [32m[1mLinking CXX executable /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_dm_hw/lib/legged_dm_hw/legged_dm_hw[0m
-[100%] Built target legged_dm_hw

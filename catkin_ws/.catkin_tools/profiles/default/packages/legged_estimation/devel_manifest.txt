@@ -1,5 +1,0 @@
-legged_estimation
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_estimation/lib/liblegged_estimation.so /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/liblegged_estimation.so
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_estimation/lib/pkgconfig/legged_estimation.pc /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/lib/pkgconfig/legged_estimation.pc
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_estimation/share/legged_estimation/cmake/legged_estimationConfig-version.cmake /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/legged_estimation/cmake/legged_estimationConfig-version.cmake
-/media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/.private/legged_estimation/share/legged_estimation/cmake/legged_estimationConfig.cmake /media/keaton/KEATON/11_Design/jet-hr2/catkin_ws/devel/share/legged_estimation/cmake/legged_estimationConfig.cmake
