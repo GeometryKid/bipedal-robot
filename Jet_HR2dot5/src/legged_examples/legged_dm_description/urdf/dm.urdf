@@ -261,8 +261,8 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-1.05"
-      upper="1.05"
+      lower="-0.52"
+      upper="0.785"
       effort="52"
       velocity="20" />
   </joint>
@@ -320,8 +320,8 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-0.52"
-      upper="0.785"
+      lower="-1.57"
+      upper="1.57"
       effort="52"
       velocity="20" />
   </joint>
@@ -438,7 +438,7 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-1.047"
+      lower="-1.57"
       upper="0.3"
       effort="52"
       velocity="20" />
@@ -524,8 +524,8 @@
     <minDepth>0.00</minDepth>
   </gazebo>
   <gazebo reference="leg_l_f1_link">
-    <mu1>1.5</mu1>
-    <mu2>1.5</mu2>
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
     <self_collide>1</self_collide>
     <kp value="1000000.0"/>
     <kd value="100.0"/>
@@ -533,8 +533,8 @@
     <minDepth>0.00</minDepth>
   </gazebo>
   <gazebo reference="leg_l_f2_link">
-    <mu1>1.5</mu1>
-    <mu2>1.5</mu2>
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
     <self_collide>1</self_collide>
     <kp value="1000000.0"/>
     <kd value="100.0"/>
@@ -721,8 +721,8 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-1.05"
-      upper="1.05"
+      lower="-0.785"
+      upper="0.52"
       effort="52"
       velocity="20" />
   </joint>
@@ -780,8 +780,8 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-0.785"
-      upper="0.52"
+      lower="-1.57"
+      upper="1.57"
       effort="52"
       velocity="20" />
   </joint>
@@ -898,7 +898,7 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-1.047"
+      lower="-1.57"
       upper="0.3"
       effort="52"
       velocity="20" />
@@ -985,8 +985,8 @@
     <minDepth>0.00</minDepth>
   </gazebo>
   <gazebo reference="leg_r_f1_link">
-    <mu1>1.5</mu1>
-    <mu2>1.5</mu2>
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
     <self_collide>1</self_collide>
     <kp value="1000000.0"/>
     <kd value="100.0"/>
@@ -994,8 +994,8 @@
     <minDepth>0.00</minDepth>
   </gazebo>
   <gazebo reference="leg_r_f2_link">
-    <mu1>1.5</mu1>
-    <mu2>1.5</mu2>
+    <mu1>2.0</mu1>
+    <mu2>2.0</mu2>
     <self_collide>1</self_collide>
     <kp value="1000000.0"/>
     <kd value="100.0"/>
