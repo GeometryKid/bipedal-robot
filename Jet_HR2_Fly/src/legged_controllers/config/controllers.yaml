@@ -1,0 +1,27 @@
+controllers:
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 100
+  legged_controller:
+    type: legged/LeggedController
+    lift_assist:
+      enabled: true
+      topics:
+        left: /lift/left/command
+        center: /lift/center/command
+        right: /lift/right/command
+      left:
+        force_scale: 0.18
+        force_bias: 0.0
+        max_force: 80.0
+      center:
+        force_scale: 0.10
+        force_bias: 0.0
+        max_force: 60.0
+      right:
+        force_scale: 0.18
+        force_bias: 0.0
+        max_force: 80.0
+  legged_cheater_controller:
+    type: legged/LeggedCheaterController
+  
