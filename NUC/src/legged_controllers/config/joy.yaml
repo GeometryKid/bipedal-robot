@@ -45,9 +45,9 @@ teleop:
     type: topic
     message_type: std_msgs/Float32
     topic_name: load_controller               
-    deadman_buttons: [ 4 ]  # 7 map F710
+    deadman_buttons: [ 6 ]  # 7 map F710
     axis_mappings:
-      - button: 4   # 7  map F710
+      - button: 6   # 7  map F710
         target: data
         scale: 2
         offset: 0
@@ -56,9 +56,9 @@ teleop:
     type: topic
     message_type: std_msgs/Float32
     topic_name: emergency_stop
-    deadman_buttons: [ 7 ]
+    deadman_buttons: [ 11 ]
     axis_mappings:
-      - button: 7
+      - button: 11
         target: data
         scale: 2
         offset: 0
@@ -67,9 +67,9 @@ teleop:
     type: topic
     message_type: std_msgs/Float32
     topic_name: set_walk
-    deadman_buttons: [ 5 ]   # 5 map F710
+    deadman_buttons: [ 7 ]   # 5 map F710
     axis_mappings:
-      - button: 5 # 5 map F710
+      - button: 7 # 5 map F710
         target: data
         scale: 2
         offset: 0

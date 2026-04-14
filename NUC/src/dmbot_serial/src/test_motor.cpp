@@ -50,7 +50,7 @@ double my_torque[10]={0.0};
 double my_kp=0.0;
 double my_kd=0.8;
 void callback(dmbot_serial::my_cfgConfig &config, uint32_t level) {
-    ROS_INFO("Reconfigure Request: ");
+     ROS_INFO("Reconfigure Request: ");
     //位置
     my_pos[0]=config.pos_set0;
     my_pos[1]=config.pos_set1;
@@ -88,8 +88,8 @@ void callback(dmbot_serial::my_cfgConfig &config, uint32_t level) {
 
     my_kp=config.kp_set;
     my_kd=config.kd_set;
-    // ROS_INFO("torque_set0: %8f,torque_set1: %8f,torque_set5: %8f,vel_set: %8f,kd_set: %8f",my_torque[0],my_torque[1],my_torque[5],my_vel[0],my_kd);
-    // ROS_INFO("kp_set: %8f,kd_set: %8f",my_kp,my_kd);
+    //ROS_INFO("torque_set0: %8f,torque_set1: %8f,torque_set5: %8f,vel_set: %8f,kd_set: %8f",my_torque[0],my_torque[1],my_torque[5],my_vel[0],my_kd);
+    //ROS_INFO("kp_set: %8f,kd_set: %8f",my_kp,my_kd);
 }
 
 double get_pos[10]={0.0};
@@ -137,9 +137,9 @@ int main(int argc, char **argv)
         flag=1;
         my_pos[0]=0.0;
         my_pos[3]=0.0;
-        // my_pos[4]=0.0;
+        my_pos[4]=0.0;
 
-        // my_pos[5]=0.0;
+        my_pos[5]=0.0;
         my_pos[8]=0.0;
         my_pos[9]=0.0;
         rampInit(&my_ramp[0], get_pos[0],my_pos[0], 1000.0);
@@ -207,16 +207,8 @@ int main(int argc, char **argv)
       rb.get_motor_data(get_pos[7], get_vel[7], get_torque[7], 7);
       rb.get_motor_data(get_pos[8], get_vel[8], get_torque[8], 8);
       rb.get_motor_data(get_pos[9], get_vel[9], get_torque[9], 9);
-      std::cerr<<"**********************************************************************************"<<std::endl;
-      // std::cerr<<"motor0: "<<"pos0: "<<my_pos[0]<<",vel0: "<<my_vel[0]<<",torque0: "<<my_torque[0]<<std::endl;
-      std::cerr<<"gmotor1: "<<"gpos1: "<<get_pos[5]<<",gvel1: "<<get_vel[4]<<",gtorque1: "<<get_torque[5]<<std::endl;
-      std::cerr<<"mmotor1: "<<"mpos1: "<<my_pos[5]<<",mvel1: "<<my_vel[4]<<",mtorque1: "<<my_torque[5]<<std::endl;
-      // std::cerr<<"motor2: "<<"pos2: "<<my_pos[2]<<",vel2: "<<my_vel[2]<<",torque2: "<<my_torque[2]<<std::endl;
-      // std::cerr<<"motor3: "<<"pos3: "<<my_pos[3]<<",vel3: "<<my_vel[3]<<",torque3: "<<my_torque[3]<<std::endl;
-      // std::cerr<<"motor4: "<<"pos4: "<<my_pos[4]<<",vel4: "<<my_vel[4]<<",torque4: "<<my_torque[4]<<std::endl;
-      std::cerr<<"**********************************************************************************"<<std::endl;
+      std::cerr<<"motor0: "<<"pos0: "<<get_pos[0]<<",vel0: "<<get_vel[0]<<",torque0: "<<get_torque[0]<<std::endl;
       r.sleep();
-      ros::spinOnce();
     }
 
     return 0;

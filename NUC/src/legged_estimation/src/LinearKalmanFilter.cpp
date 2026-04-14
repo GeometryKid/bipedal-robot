@@ -22,7 +22,6 @@ at www.bridgedp.com.
 
 namespace legged
 {
-// 
 KalmanFilterEstimate::KalmanFilterEstimate(PinocchioInterface pinocchioInterface, CentroidalModelInfo info,
                                            const PinocchioEndEffectorKinematics& eeKinematics)
   : StateEstimateBase(std::move(pinocchioInterface), std::move(info), eeKinematics)

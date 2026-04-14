@@ -74,7 +74,6 @@ public:
    * @return True when init successful, False when failed.
    */
   bool init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh) override;
-  
   /** \brief Communicate with hardware. Get data, status of robot.
    *
    * Call @ref Gsmp_LEGGED_SDK::UDP::Recv() to get robot's state.
@@ -117,7 +116,7 @@ private:
   DmMotorData dmSendcmd_[10];
   float transform_CurrentPos[12] = { 0 };
 
-  const std::vector<int> directionMotor_{ 1, 1, -1, 1, 1,    -1, 1, -1, -1, -1};//65432
+  const std::vector<int> directionMotor_{ 1, 1, -1, -1, -1,    -1, 1, -1, -1, -1};//65432
 
   ros::Subscriber odom_sub_;
 
