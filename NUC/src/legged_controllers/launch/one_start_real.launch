@@ -5,7 +5,7 @@
 
     <arg name="robot_type" default="dm" doc="Robot type: [dm]"/>
     <arg name="rviz" default="true"/>
-    <arg name="record_data" default="false"/>
+    <arg name="record_data" default="true"/>
 
     <include file="$(find legged_dm_hw)/launch/legged_dm_hw.launch"/>
 

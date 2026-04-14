@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+
+<launch>
+  <arg name="bagfile" default="/home/r/catkin_ws/logs/legged_data.bag"/>
+  <arg name="record_all" default="true"/>
+  <arg name="topics" default="/controllers/legged_controller/joint_position /controllers/legged_controller/joint_velocity /controllers/legged_controller/joint_torque /controllers/legged_controller/cmd_joint_position /controllers/legged_controller/cmd_joint_velocity /controllers/legged_controller/cmd_joint_torque /controllers/legged_controller/imu /imu/data2 /imu/data /controllers/legged_controller/mpc_force /controllers/legged_controller/wbc_force /controllers/legged_controller/cmd_joint_actorque /controllers/legged_controller/pose_stamped /tf /tf_static /clock"/>
+
+  <node if="$(arg record_all)" name="rosbag_record_all" pkg="rosbag" type="record" output="screen" args="-O $(arg bagfile) -a"/>
+  <node unless="$(arg record_all)" name="rosbag_record_topics" pkg="rosbag" type="record" output="screen" args="-O $(arg bagfile) $(arg topics)"/>
+</launch>
