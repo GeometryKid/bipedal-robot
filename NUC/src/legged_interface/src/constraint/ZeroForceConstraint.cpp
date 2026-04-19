@@ -69,7 +69,7 @@ vector_t ZeroForceConstraint::getValue(scalar_t time, const vector_t& state, con
                                        const PreComputation& preComp) const
 {
   vector_t force(getNumConstraints(time));
-  force << centroidal_model::getContactForces(input, contactPointIndex_, info_);
+  force << centroidal_model::getContactForces(input, contactPointIndex_, info_); // 获取力数据
   return force;
 }
 

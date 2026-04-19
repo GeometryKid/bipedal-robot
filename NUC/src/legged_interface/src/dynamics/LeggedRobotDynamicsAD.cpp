@@ -41,31 +41,42 @@ namespace ocs2
 namespace legged_robot
 {
 /******************************************************************************************************/
+// 动力学初始化
 /******************************************************************************************************/
 /******************************************************************************************************/
-LeggedRobotDynamicsAD::LeggedRobotDynamicsAD(const PinocchioInterface& pinocchioInterface,
-                                             const CentroidalModelInfo& info, const std::string& modelName,
-                                             const ModelSettings& modelSettings)
-  : pinocchioCentroidalDynamicsAd_(pinocchioInterface, info, modelName, modelSettings.modelFolderCppAd,
-                                   modelSettings.recompileLibrariesCppAd, modelSettings.verboseCppAd)
-{
-}
+LeggedRobotDynamicsAD::LeggedRobotDynamicsAD(
+  const PinocchioInterface& pinocchioInterface,                                           
+  const CentroidalModelInfo& info, 
+  const std::string& modelName,
+  const ModelSettings& modelSettings)
+  : pinocchioCentroidalDynamicsAd_(
+      pinocchioInterface, info, modelName, 
+      modelSettings.modelFolderCppAd,
+      modelSettings.recompileLibrariesCppAd, 
+      modelSettings.verboseCppAd){}
 
 /******************************************************************************************************/
+// 动力学方程计算
 /******************************************************************************************************/
 /******************************************************************************************************/
-vector_t LeggedRobotDynamicsAD::computeFlowMap(scalar_t time, const vector_t& state, const vector_t& input,
-                                               const PreComputation& preComp)
+vector_t LeggedRobotDynamicsAD::computeFlowMap(
+  scalar_t time, 
+  const vector_t& state, 
+  const vector_t& input,            
+  const PreComputation& preComp)
 {
   return pinocchioCentroidalDynamicsAd_.getValue(time, state, input);
 }
 
 /******************************************************************************************************/
+// 动力学线性化
 /******************************************************************************************************/
 /******************************************************************************************************/
-VectorFunctionLinearApproximation LeggedRobotDynamicsAD::linearApproximation(scalar_t time, const vector_t& state,
-                                                                             const vector_t& input,
-                                                                             const PreComputation& preComp)
+VectorFunctionLinearApproximation LeggedRobotDynamicsAD::linearApproximation(
+  scalar_t time, 
+  const vector_t& state,                                                                    
+  const vector_t& input,                                                               
+  const PreComputation& preComp)
 {
   return pinocchioCentroidalDynamicsAd_.getLinearApproximation(time, state, input);
 }

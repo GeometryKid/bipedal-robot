@@ -229,7 +229,13 @@ void robot::send_motor_data()
     try
     { //通过串口向下位机发送数据 
       serial_motor.write(Send_Data.tx,sizeof(Send_Data.tx));
-    //ROS_INFO("Current time Motor: %f", interval.toSec());
+      // ROS_INFO("Current time Motor: %f", interval.toSec());
+      // ROS_INFO_STREAM("id: " << motor.index);
+      // ROS_INFO_STREAM("type: " << motor.type);
+      // ROS_INFO_STREAM("FRAME_HEADER  ID  POS  VEL   KP   KD  TOR  CHECK_SUM");
+      // char buf[50];           // 两位 hex + '\0'
+      // sprintf(buf, "    %04X     %04X %04X %04X %04X %04X %04X %02X", FRAME_HEADER, motor.index, pos_tmp, vel_tmp, kp_tmp, kd_tmp, tor_tmp, Send_Data.tx[10]);
+      // ROS_INFO_STREAM(buf);
     }
     catch (serial::IOException& e)   
     {

@@ -43,6 +43,13 @@ at www.bridgedp.com.
 
 #include "legged_interface/common/ModelSettings.h"
 
+//============================================================================//
+//                             TYPE DEFINITIONS                              //
+// vector_t& state: [q, dq, tau]
+// vector_t& input: [tau]
+// vector_t& preComp: [q, dq, tau]
+//============================================================================//
+
 namespace ocs2
 {
 namespace legged_robot

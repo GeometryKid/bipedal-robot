@@ -13,6 +13,7 @@ using namespace ocs2;
 
 std_msgs::Float64MultiArray createFloat64MultiArrayFromVector(const vector_t& data)
 {
+  // 创建 Float64MultiArray 消息
   std_msgs::Float64MultiArray msg;
   msg.data.resize(data.size());
   vector_t::Map(&msg.data[0], data.size()) = data;
