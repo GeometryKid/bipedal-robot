@@ -4,7 +4,7 @@
 
     <arg name="robot_type" default="dm" doc="Robot type: [dm]"/>
     <arg name="rviz" default="true"/>
-    <arg name="record_data" default="true"/>
+    <arg name="record_data" default="false"/>
 
     <include file="$(find legged_dm_description)/launch/empty_world.launch"/>
 
