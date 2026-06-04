@@ -1,12 +1,15 @@
 ## bipedal-robot
 
-该程序是没有手臂版本。
+ 该分支是达妙官方的开源版本
 
-该程序跑在ubuntu20.04上，使用ROS1-Noetic，需要x86架构电脑，**比较吃cpu**。
+### 环境配置
+- ubuntu20.04
+- ROS1-Noetic
+- x86架构电脑
 
-该程序使用OCS2和ros-control框架，控制方法是非线性模型预测控制，模型采用质心动力学。
+ 该程序使用OCS2和ros-control框架，控制方法是非线性模型预测控制，模型采用质心动力学。
 
-该程序是基于[livelybot_dynamic_control](https://github.com/HighTorque-Robotics/livelybot_dynamic_control)、[hunter_bipedal_control](https://bridgedp.github.io/hunter_bipedal_control)以及[legged_control](https://github.com/qiayuanl/legged_control)上进行一些改进，主要是对**约束**进行了修改。
+ 该程序是基于[livelybot_dynamic_control](https://github.com/HighTorque-Robotics/livelybot_dynamic_control)、[hunter_bipedal_control](https://bridgedp.github.io/hunter_bipedal_control)以及[legged_control](https://github.com/qiayuanl/legged_control)上进行一些改进，主要是对**约束**进行了修改。
 
 ## 学习
 1. 理论框架
